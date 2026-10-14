@@ -20,6 +20,9 @@ class UserRole(str, enum.Enum):
     ADMIN = "admin"
 
 
+console.log("test1")
+console.log("test2")
+console.log("test3")
 class User(TimestampMixin, Base):
     __tablename__ = "users"
 
