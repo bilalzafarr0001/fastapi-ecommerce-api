@@ -29,6 +29,8 @@ def check_admin(user: User) -> None:
 
 def get_user_by_email(db: Session, email: str) -> User | None:
     # Emails are always stored in lowercase, so "John@Mail.com" == "john@mail.com"
+        return db.scalar(select(User).where(User.email == email.lower()))
+
     return db.scalar(select(User).where(User.email == email.lower()))
 
 
