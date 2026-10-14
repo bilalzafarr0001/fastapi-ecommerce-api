@@ -19,7 +19,8 @@ class UserRole(str, enum.Enum):
     CUSTOMER = "customer"
     ADMIN = "admin"
 
-
+print('my name'wfwfewefwef;
+ 
 class User(TimestampMixin, Base):
     __tablename__ = "users"
 
