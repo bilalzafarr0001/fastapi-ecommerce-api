@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Notifications</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; font-family: monospace; }
+    button { margin-top: 8px; padding: 8px 16px; cursor: pointer; }
+    #status { margin: 12px 0; font-weight: bold; }
+    #messages { list-style: none; padding: 0; }
+    #messages li { background: #f1f5f9; margin: 6px 0; padding: 8px 12px; border-radius: 6px; font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h1>ShopSphere - Live Notifications</h1>
+  <ol>
+    <li>Log in as a customer (POST /api/v1/auth/login) and paste the <b>access_token</b> below.</li>
+    <li>Click <b>Connect</b>.</li>
+    <li>As an admin, change the status of one of that customer's orders
+        (PATCH /api/v1/orders/{id}/status) and watch the message appear here.</li>
+  </ol>
+
+  <input id="token" placeholder="Paste your access token here">
+  <button id="connect">Connect</button>
+  <div id="status">Disconnected</div>
+  <ul id="messages"></ul>
+
+  <script>
+    let socket = null;
+
+    document.getElementById("connect").onclick = () => {
+      if (socket) socket.close();
+      const token = document.getElementById("token").value.trim();
+      const protocol = location.protocol === "https:" ? "wss" : "ws";
+      socket = new WebSocket(`${protocol}://${location.host}/api/v1/notifications/ws?token=${encodeURIComponent(token)}`);
+
+      socket.onopen = () => (document.getElementById("status").textContent = "Connected - waiting for notifications...");
+      socket.onclose = () => (document.getElementById("status").textContent = "Disconnected (is your token valid?)");
+      socket.onmessage = (event) => {
+        const item = document.createElement("li");
+        item.textContent = event.data;
+        document.getElementById("messages").prepend(item);
+      };
+    };
+  </script>
+</body>
+</html>

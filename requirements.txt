@@ -1,0 +1,21 @@
+# --- Web framework ---
+fastapi==0.143.0            # the web framework
+uvicorn[standard]==0.54.0   # the server that runs the app (+ WebSocket support)
+python-multipart==0.0.32    # needed for form data (login) and file uploads
+
+# --- Database ---
+SQLAlchemy==2.1.4           # ORM: Python classes <-> database tables
+psycopg[binary]==3.3.6      # PostgreSQL driver
+alembic==1.20.0             # database migrations
+
+# --- Settings & validation ---
+pydantic-settings==2.15.0   # reads the settings from .env
+email-validator==2.3.0      # enables Pydantic's EmailStr type
+
+# --- Security ---
+PyJWT==2.15.1               # create and verify JWT tokens
+pwdlib[argon2]==0.3.1       # password hashing (Argon2)
+
+# --- Testing ---
+pytest==9.1.1
+httpx2==2.13.1              # used by FastAPI's TestClient

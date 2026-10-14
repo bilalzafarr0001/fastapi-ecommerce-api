@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets
+.env
+
+# Tests / tools
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Uploaded files (keep the folder, ignore its content)
+uploads/*
+!uploads/.gitkeep
+
+# Local databases
+*.db
+*.sqlite3
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

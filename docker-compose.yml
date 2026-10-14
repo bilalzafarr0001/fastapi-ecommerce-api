@@ -1,0 +1,36 @@
+# Optional: run PostgreSQL + the API in containers.
+#   docker compose up --build
+#   docker compose exec api python -m app.seed
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: shopsphere
+    ports:
+      - "5433:5432" # 5433 on your machine, so it doesn't clash with a locally installed PostgreSQL
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      # Inside Docker the database host is the service name "db"
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/shopsphere
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./uploads:/code/uploads
+
+volumes:
+  postgres_data:
